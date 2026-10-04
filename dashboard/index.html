@@ -1,0 +1,562 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="description" content="TacticalVision Monitoring System" />
+
+    <title>TacticalVision — Overview</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="app">
+      <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">TV</div>
+
+          <div class="brand-text">
+            <strong> TACTICALVISION </strong>
+
+            <span> MONITORING SYSTEM </span>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+
+        <nav class="sidebar-nav">
+          <a
+            href="#overview"
+            class="nav-item active"
+            data-route="overview"
+            data-view="overview"
+          >
+            <span class="nav-icon"> ◉ </span>
+
+            <span> Overview </span>
+          </a>
+
+          <a
+            href="#events"
+            class="nav-item"
+            data-route="events"
+            data-view="events"
+          >
+            <span class="nav-icon"> ≡ </span>
+
+            <span> Events </span>
+          </a>
+
+          <a
+            href="#objects"
+            class="nav-item"
+            data-route="objects"
+            data-view="objects"
+          >
+            <span class="nav-icon"> ◎ </span>
+
+            <span> Objects </span>
+          </a>
+
+          <a
+            href="#zones"
+            class="nav-item"
+            data-route="zones"
+            data-view="zones"
+          >
+            <span class="nav-icon"> □ </span>
+
+            <span> Zones </span>
+          </a>
+
+          <a
+            href="#analytics"
+            class="nav-item"
+            data-route="analytics"
+            data-view="analytics"
+          >
+            <span class="nav-icon"> ▥ </span>
+
+            <span> Analytics </span>
+          </a>
+
+          <a
+            href="#system"
+            class="nav-item"
+            data-route="system"
+            data-view="system"
+          >
+            <span class="nav-icon"> ⚙ </span>
+
+            <span> System </span>
+          </a>
+        </nav>
+
+        <!-- Sidebar status -->
+
+        <div class="sidebar-footer">
+          <div class="sidebar-status">
+            <span id="sidebar-dot" class="status-dot"></span>
+
+            <div>
+              <span class="status-label"> SYSTEM </span>
+
+              <span id="sidebar-status"> OFFLINE </span>
+            </div>
+          </div>
+
+          <div class="sidebar-version">v0.2.0</div>
+        </div>
+      </aside>
+
+      <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+      <main class="main">
+        <!-- =================================================
+             OVERVIEW
+             ================================================= -->
+
+        <section id="view-overview" class="view active">
+          <header class="topbar">
+            <div>
+              <h1>Overview</h1>
+
+              <p>Real-time monitoring overview</p>
+            </div>
+
+            <div class="topbar-right">
+              <div class="system-indicator">
+                <span id="live-dot" class="status-dot"></span>
+
+                <span id="system-status"> SYSTEM OFFLINE </span>
+              </div>
+
+              <span id="current-time"> --:--:-- </span>
+
+              <button id="refresh-btn" class="refresh-btn" type="button">
+                REFRESH
+              </button>
+            </div>
+          </header>
+
+          <!-- KPI CARDS -->
+
+          <section class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">TOTAL EVENTS</div>
+
+              <div id="events" class="kpi-value">--</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-label">ALERTS</div>
+
+              <div id="alerts" class="kpi-value alert-value">--</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-label">ANOMALIES</div>
+
+              <div id="anomalies" class="kpi-value warning-value">--</div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-label">OBJECT CLASSES</div>
+
+              <div id="classes" class="kpi-value">--</div>
+            </div>
+          </section>
+
+          <!-- MAIN OVERVIEW GRID -->
+
+          <section class="dashboard-grid">
+            <!-- Event Analytics -->
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>Event Analytics</h2>
+
+                  <span> Event distribution </span>
+                </div>
+              </div>
+
+              <div class="chart-container">
+                <canvas id="event-chart"></canvas>
+              </div>
+            </div>
+
+            <!-- Object Classes -->
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>Object Classes</h2>
+
+                  <span> Detected classes </span>
+                </div>
+              </div>
+
+              <div id="object-classes" class="class-list">
+                <div class="empty-state">No data</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- LOWER GRID -->
+
+          <section class="dashboard-grid">
+            <!-- Zone Activity -->
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>Zone Activity</h2>
+
+                  <span> Events by zone </span>
+                </div>
+              </div>
+
+              <div id="zone-activity" class="zone-list">
+                <div class="empty-state">No zone data</div>
+              </div>
+            </div>
+
+            <!-- System Status -->
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2>System Status</h2>
+
+                  <span> Runtime information </span>
+                </div>
+              </div>
+
+              <div class="system-list">
+                <div class="system-row">
+                  <span> API </span>
+
+                  <strong id="api-status"> OFFLINE </strong>
+                </div>
+
+                <div class="system-row">
+                  <span> DATABASE </span>
+
+                  <strong id="database-status"> ONLINE </strong>
+                </div>
+
+                <div class="system-row">
+                  <span> EVENTS </span>
+
+                  <strong id="system-events"> -- </strong>
+                </div>
+
+                <div class="system-row">
+                  <span> LAST UPDATE </span>
+
+                  <strong id="last-update"> -- </strong>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- RECENT EVENTS -->
+
+          <section class="card recent-events">
+            <div class="card-header">
+              <div>
+                <h2>Recent Events</h2>
+
+                <span> Latest system activity </span>
+              </div>
+
+              <span id="recent-events-count" class="card-badge">
+                0 EVENTS
+              </span>
+            </div>
+
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+
+                    <th>TIME</th>
+
+                    <th>OBJECT</th>
+
+                    <th>CLASS</th>
+
+                    <th>EVENT</th>
+
+                    <th>ZONE</th>
+
+                    <th>CONFIDENCE</th>
+                  </tr>
+                </thead>
+
+                <tbody id="recent-events-body">
+                  <tr>
+                    <td colspan="7" class="empty-state">
+                      Waiting for events...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <!-- =================================================
+             EVENTS
+             ================================================= -->
+
+        <section id="view-events" class="view">
+          <header class="topbar">
+            <div>
+              <h1>Events</h1>
+
+              <p>Event history and activity monitoring</p>
+            </div>
+
+            <div class="topbar-right">
+              <button id="events-refresh" class="refresh-btn" type="button">
+                REFRESH
+              </button>
+            </div>
+          </header>
+
+          <!-- EVENT FILTERS -->
+
+          <div class="filters">
+            <select id="filter-type">
+              <option value="">All Types</option>
+            </select>
+
+            <select id="filter-class">
+              <option value="">All Classes</option>
+            </select>
+
+            <select id="filter-zone">
+              <option value="">All Zones</option>
+            </select>
+
+            <input
+              id="filter-search"
+              type="text"
+              placeholder="Search object ID..."
+            />
+          </div>
+
+          <!-- EVENT TABLE -->
+
+          <section class="card">
+            <div class="card-header">
+              <div>
+                <h2>Event Log</h2>
+
+                <span> Historical event records </span>
+              </div>
+
+              <span id="events-count" class="card-badge"> 0 EVENTS </span>
+            </div>
+
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+
+                    <th>TIME</th>
+
+                    <th>OBJECT</th>
+
+                    <th>CLASS</th>
+
+                    <th>EVENT</th>
+
+                    <th>ZONE</th>
+
+                    <th>CONFIDENCE</th>
+                  </tr>
+                </thead>
+
+                <tbody id="events-table-body">
+                  <tr>
+                    <td colspan="7" class="empty-state">Loading events...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <!-- =================================================
+             OBJECTS
+             ================================================= -->
+
+        <section id="view-objects" class="view">
+          <header class="topbar">
+            <div>
+              <h1>Objects</h1>
+
+              <p>Tracked objects detected by the vision system</p>
+            </div>
+          </header>
+
+          <section id="objects-container" class="content-grid">
+            <div class="card">
+              <div class="card-header">
+                <h2>Tracked Objects</h2>
+              </div>
+
+              <div class="empty-state">
+                Object tracking data will appear here.
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- =================================================
+             ZONES
+             ================================================= -->
+
+        <section id="view-zones" class="view">
+          <header class="topbar">
+            <div>
+              <h1>Zones</h1>
+
+              <p>Zone activity and event distribution</p>
+            </div>
+          </header>
+
+          <section id="zones-container" class="content-grid">
+            <div class="card">
+              <div class="card-header">
+                <h2>Zone Activity</h2>
+              </div>
+
+              <div class="empty-state">Zone data will appear here.</div>
+            </div>
+          </section>
+        </section>
+
+        <!-- =================================================
+             ANALYTICS
+             ================================================= -->
+
+        <section id="view-analytics" class="view">
+          <header class="topbar">
+            <div>
+              <h1>Analytics</h1>
+
+              <p>System activity and behavioral statistics</p>
+            </div>
+          </header>
+
+          <section id="analytics-container" class="content-grid">
+            <div class="card">
+              <div class="card-header">
+                <h2>Analytics</h2>
+              </div>
+
+              <div class="empty-state">Analytics data will appear here.</div>
+            </div>
+          </section>
+        </section>
+
+        <!-- =================================================
+             SYSTEM
+             ================================================= -->
+
+        <section id="view-system" class="view">
+          <header class="topbar">
+            <div>
+              <h1>System</h1>
+
+              <p>TacticalVision subsystem diagnostics</p>
+            </div>
+          </header>
+
+          <section id="system-container" class="content-grid">
+            <div class="card">
+              <div class="card-header">
+                <h2>System Status</h2>
+              </div>
+
+              <div class="system-list">
+                <div class="system-row">
+                  <span> API </span>
+
+                  <strong id="system-api"> -- </strong>
+                </div>
+
+                <div class="system-row">
+                  <span> DATABASE </span>
+
+                  <strong id="system-database"> -- </strong>
+                </div>
+
+                <div class="system-row">
+                  <span> DETECTOR </span>
+
+                  <strong id="system-detector"> -- </strong>
+                </div>
+
+                <div class="system-row">
+                  <span> TRACKER </span>
+
+                  <strong id="system-tracker"> -- </strong>
+                </div>
+
+                <div class="system-row">
+                  <span> CAMERA </span>
+
+                  <strong id="system-camera"> -- </strong>
+                </div>
+
+                <div class="system-row">
+                  <span> EVENTS </span>
+
+                  <strong id="system-total-events"> -- </strong>
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- =================================================
+             FOOTER
+             ================================================= -->
+
+        <footer class="footer">
+          <span> TACTICALVISION </span>
+
+          <span> Computer Vision Monitoring System </span>
+
+          <span> v0.2.0 </span>
+        </footer>
+      </main>
+    </div>
+
+    <!-- =========================================================
+     DASHBOARD APP
+     ========================================================= -->
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

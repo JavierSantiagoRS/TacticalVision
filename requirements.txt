@@ -1,0 +1,6 @@
+# Runtime dependencies
+fastapi>=0.100
+opencv-python>=4.8
+psutil>=5.9
+ultralytics>=8.0
+uvicorn>=0.22
